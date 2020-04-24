@@ -59,7 +59,7 @@ func main() {
 
 	for m := range chIn {
 		if m.Error != nil {
-			panic(m.Error)
+			panic(*m.Error)
 		}
 
 		select {

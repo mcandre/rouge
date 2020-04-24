@@ -4,9 +4,6 @@ import (
 	"github.com/go-audio/audio"
 	"github.com/go-audio/wav"
 
-	"bytes"
-	"encoding/binary"
-	"io"
 	"log"
 	"os"
 )
@@ -50,30 +47,6 @@ func (o *WavModulator) Encoder() (chan<- Message, <-chan error) {
 				return
 			}
 
-			//
-			// DPSK...
-			//
-
-			var ds []int
-			var d int64
-			bb := bytes.NewBuffer(m.Data)
-
-			for {
-				err := binary.Read(bb, binary.LittleEndian, &d)
-
-				if err != nil {
-					if err == io.EOF {
-						ds = append(ds, int(d))
-						break
-					} else {
-						chErr<-err
-						return
-					}
-				}
-
-				ds = append(ds, int(d))
-			}
-
 			format := &audio.Format{
 				NumChannels: int(o.sourceNumChannels),
 				SampleRate: int(o.sourceSampleRate),
@@ -81,9 +54,20 @@ func (o *WavModulator) Encoder() (chan<- Message, <-chan error) {
 
 			buf := audio.IntBuffer{
 				Format: format,
-				Data: ds,
 				SourceBitDepth: int(o.sourceBitDepth),
 			}
+
+			//
+			// DPSK...
+			//
+
+			xs, err := BytesToInts(m.Data)
+
+			if err != nil {
+				return
+			}
+
+			buf.Data = xs
 
 			if err := o.w.Write(&buf); err != nil {
 				chErr<-err

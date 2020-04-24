@@ -5,8 +5,6 @@ import (
 	"github.com/go-audio/riff"
 	"github.com/go-audio/wav"
 
-	"bytes"
-	"encoding/binary"
 	"fmt"
 	"io"
 	"os"
@@ -28,6 +26,8 @@ func NewWavDemodulator(f *os.File) (*WavDemodulator, error) {
 
 	p := riff.New(f)
 
+	w.ReadInfo()
+
 	if err := w.FwdToPCM(); err != nil {
 		return nil, err
 	}
@@ -41,13 +41,7 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 
 	go func() {
 		for {
-			m := Message{}
-
-			if o.w.EOF() {
-				m.Done = true
-				ch<-m
-				return
-			}
+			var m Message
 
 			fmt.Fprintf(os.Stderr, "Next chunk...\n")
 
@@ -74,20 +68,10 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 			// DPSK...
 			//
 
-			bb := new(bytes.Buffer)
+			m.Data, err = IntsToBytes(buf.Data)
 
-			for _, d := range buf.Data {
-				if err2 := binary.Write(bb, binary.LittleEndian, int64(d)); err2 != nil {
-					m.Error = &err2
-					ch<-m
-					return
-				}
-			}
-
-			m.Data = bb.Bytes()
-
-			if err == io.EOF {
-				m.Done = true
+			if err != nil {
+				m.Error = &err
 				ch<-m
 				return
 			}
