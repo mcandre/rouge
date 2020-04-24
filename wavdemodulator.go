@@ -43,14 +43,13 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 		for {
 			var m Message
 
-			fmt.Fprintf(os.Stderr, "Next chunk...\n")
-
 			buf := &audio.IntBuffer{
 				Format: o.w.Format(),
 				Data: make([]int, 1024),
 			}
 
 			count, err := o.w.PCMBuffer(buf)
+			buf.Data = buf.Data[:count]
 
 			if err != nil && err != io.EOF {
 				m.Error = &err
