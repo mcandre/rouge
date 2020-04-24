@@ -50,18 +50,18 @@ func (o *RawDemodulator) Decoder() <-chan Message {
 	return ch
 }
 
-func (o RawDemodulator) SampleRate() uint32 {
-	return 22050
+func (o RawDemodulator) SampleRate() int {
+	return 0
 }
 
-func (o RawDemodulator) BitDepth() uint16 {
-	return 16
+func (o RawDemodulator) BitDepth() int {
+	return 0
 }
 
-func (o RawDemodulator) NumChannels() uint16 {
-	return 1
+func (o RawDemodulator) NumChannels() int {
+	return 0
 }
 
-func (o RawDemodulator) WavCategory() uint16 {
-	return 1
+func (o RawDemodulator) WavCategory() int {
+	return 0
 }

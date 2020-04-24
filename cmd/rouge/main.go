@@ -10,10 +10,10 @@ import (
 
 var flagIn = flag.String("in", "", "WAV input file (default: raw stdin)")
 var flagOut = flag.String("out", "", "WAV output file (default: raw stdout)")
-var flagSampleRateIn = flag.Int("sampleRateIn", -1, "Specify sample rate in, e.g. with raw stdin data")
-var flagBitDepthIn = flag.Int("bitDepthIn", -1, "Specify bit depth in, e.g. with raw stdin data")
-var flagChannelsIn = flag.Int("channelsIn", -1, "Specify number of audio channels in, e.g. with raw stdin data")
-var flagCategoryIn = flag.Int("categoryIn", -1, "Specify WAV category in, e.g. with raw stdin data. PCM is category 1.")
+var flagSampleRateIn = flag.Int("sampleRateIn", 0, "Specify sample rate in, e.g. with raw stdin data")
+var flagBitDepthIn = flag.Int("bitDepthIn", 0, "Specify bit depth in, e.g. with raw stdin data")
+var flagChannelsIn = flag.Int("channelsIn", 0, "Specify number of audio channels in, e.g. with raw stdin data")
+var flagCategoryIn = flag.Int("categoryIn", 0, "Specify WAV category in, e.g. with raw stdin data. PCM is category 1.")
 var flagVersion = flag.Bool("version", false, "Show version information")
 
 func main() {
@@ -55,29 +55,49 @@ func main() {
 
 		sampleRate := dem.SampleRate()
 
-		if *flagSampleRateIn != -1 {
-			sampleRate = uint32(*flagSampleRateIn)
+		if *flagSampleRateIn != 0 {
+			sampleRate = *flagSampleRateIn
+		}
+
+		if sampleRate == 0 {
+			fmt.Fprintf(os.Stderr, "Missing -in or -sampleRateIn\n")
+			os.Exit(1)
 		}
 
 		bitDepth := dem.BitDepth()
 
-		if *flagBitDepthIn != -1 {
-			bitDepth = uint16(*flagBitDepthIn)
+		if *flagBitDepthIn != 0 {
+			bitDepth = *flagBitDepthIn
 		}
 
-		channelsIn := dem.NumChannels()
-
-		if *flagChannelsIn != -1 {
-			channelsIn = uint16(*flagChannelsIn)
+		if bitDepth == 0 {
+			fmt.Fprintf(os.Stderr, "Missing -in or -bitDepthIn\n")
+			os.Exit(1)
 		}
 
-		categoryIn := dem.WavCategory()
+		numChannels := dem.NumChannels()
 
-		if *flagCategoryIn != -1 {
-			categoryIn = uint16(*flagCategoryIn)
+		if *flagChannelsIn != 0 {
+			numChannels = *flagChannelsIn
 		}
 
-		mod = rouge.NewWavModulator(file, sampleRate, bitDepth, channelsIn, sampleRate, bitDepth, channelsIn, categoryIn)
+		if numChannels == 0 {
+			fmt.Fprintf(os.Stderr, "Missing -in or -channelsIn\n")
+			os.Exit(1)
+		}
+
+		wavCategory := dem.WavCategory()
+
+		if *flagCategoryIn != 0 {
+			wavCategory = *flagCategoryIn
+		}
+
+		if wavCategory == 0 {
+			fmt.Fprintf(os.Stderr, "Missing -in or -categoryIn\n")
+			os.Exit(1)
+		}
+
+		mod = rouge.NewWavModulator(file, uint32(sampleRate), uint16(bitDepth), uint16(numChannels), uint32(sampleRate), uint16(bitDepth), uint16(numChannels), uint16(wavCategory))
 	} else {
 		mod = rouge.NewRawModulator(os.Stdout)
 	}

@@ -88,18 +88,18 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 	return ch
 }
 
-func (o WavDemodulator) SampleRate() uint32 {
-	return o.w.SampleRate
+func (o WavDemodulator) SampleRate() int {
+	return int(o.w.SampleRate)
 }
 
-func (o WavDemodulator) BitDepth() uint16 {
-	return o.w.BitDepth
+func (o WavDemodulator) BitDepth() int {
+	return int(o.w.BitDepth)
 }
 
-func (o WavDemodulator) NumChannels() uint16 {
-	return o.w.NumChans
+func (o WavDemodulator) NumChannels() int {
+	return int(o.w.NumChans)
 }
 
-func (o WavDemodulator) WavCategory() uint16 {
-	return o.w.WavAudioFormat
+func (o WavDemodulator) WavCategory() int {
+	return int(o.w.WavAudioFormat)
 }
