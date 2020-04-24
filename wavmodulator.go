@@ -6,12 +6,6 @@ import (
 
 	"bytes"
 	"encoding/binary"
-
-
-
-	"fmt"
-
-
 	"io"
 	"log"
 	"os"
@@ -84,11 +78,6 @@ func (o *WavModulator) Encoder() (chan<- Message, <-chan error) {
 				NumChannels: int(o.sourceNumChannels),
 				SampleRate: int(o.sourceSampleRate),
 			}
-
-
-
-			fmt.Fprintf(os.Stderr, "Format num channels: %v\n", format)
-
 
 			buf := audio.IntBuffer{
 				Format: format,
