@@ -1,6 +1,7 @@
 package rouge
 
 import (
+	"log"
 	"os"
 )
 
@@ -20,24 +21,30 @@ func (o *RawModulator) Encoder() (chan<- Message, <-chan error) {
 	chErr := make(chan error)
 
 	go func() {
+		defer func() {
+			if err := o.f.Close(); err != nil {
+				log.Print(err)
+			}
+		}()
+
 		var m Message
 
 		for {
 			m = <-ch
 
 			if m.Error != nil {
-				break
+				return
 			}
 
 			_, err := o.f.Write(m.Data)
 
 			if err != nil {
 				chErr<-err
-				break
+				return
 			}
 
 			if m.Done {
-				break
+				return
 			}
 		}
 	}()

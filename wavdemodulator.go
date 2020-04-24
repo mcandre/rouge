@@ -1,15 +1,21 @@
 package rouge
 
 import (
+	"github.com/go-audio/audio"
+	"github.com/go-audio/riff"
 	"github.com/go-audio/wav"
 
+	"bytes"
+	"encoding/binary"
 	"fmt"
+	"io"
 	"os"
 )
 
 // WavDemodulator passes in WAV file data.
 type WavDemodulator struct {
 	w *wav.Decoder
+	p *riff.Parser
 }
 
 // NewWavDemodulator constructs a WavDemodulator.
@@ -20,11 +26,13 @@ func NewWavDemodulator(f *os.File) (*WavDemodulator, error) {
 		return nil, fmt.Errorf("not a valid wav file")
 	}
 
+	p := riff.New(f)
+
 	if err := w.FwdToPCM(); err != nil {
 		return nil, err
 	}
 
-	return &WavDemodulator{w: w}, nil
+	return &WavDemodulator{w: w, p: p}, nil
 }
 
 // Decoder returns signal readers.
@@ -38,30 +46,50 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 			if o.w.EOF() {
 				m.Done = true
 				ch<-m
-				break
+				return
 			}
 
-			chunk, err := o.w.NextChunk()
+			fmt.Fprintf(os.Stderr, "Next chunk...\n")
 
+			buf := &audio.IntBuffer{
+				Format: o.w.Format(),
+				Data: make([]int, 1024),
+			}
 
+			count, err := o.w.PCMBuffer(buf)
 
-			fmt.Printf("Chunk: %v\n", chunk)
+			if err != nil && err != io.EOF {
+				m.Error = &err
+				ch<-m
+				return
+			}
 
+			if count == 0 {
+				m.Done = true
+				ch<-m
+				return
+			}
 
 			//
 			// DPSK...
 			//
 
-			if err != nil {
-				// go-audio EOF identifier.
-				if err.Error() == "error reading chunk header - EOF" {
-					m.Done = true
-				} else {
-					m.Error = &err
-				}
+			bb := new(bytes.Buffer)
 
+			for _, d := range buf.Data {
+				if err2 := binary.Write(bb, binary.LittleEndian, int64(d)); err2 != nil {
+					m.Error = &err2
+					ch<-m
+					return
+				}
+			}
+
+			m.Data = bb.Bytes()
+
+			if err == io.EOF {
+				m.Done = true
 				ch<-m
-				break
+				return
 			}
 
 			ch<-m
@@ -69,4 +97,20 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 	}()
 
 	return ch
+}
+
+func (o WavDemodulator) SampleRate() uint32 {
+	return o.w.SampleRate
+}
+
+func (o WavDemodulator) BitDepth() uint16 {
+	return o.w.BitDepth
+}
+
+func (o WavDemodulator) NumChannels() uint16 {
+	return o.w.NumChans
+}
+
+func (o WavDemodulator) WavCategory() uint16 {
+	return o.w.WavAudioFormat
 }

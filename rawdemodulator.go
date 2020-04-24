@@ -2,6 +2,7 @@ package rouge
 
 import (
 	"io"
+	"log"
 	"os"
 )
 
@@ -20,6 +21,12 @@ func (o *RawDemodulator) Decoder() <-chan Message {
 	ch := make(chan Message)
 
 	go func() {
+		defer func() {
+			if err := o.f.Close(); err != nil {
+				log.Print(err)
+			}
+		}()
+
 		for {
 			buf := make([]byte, 1024)
 			count, err := o.f.Read(buf)
@@ -33,7 +40,7 @@ func (o *RawDemodulator) Decoder() <-chan Message {
 				}
 
 				ch<-m
-				break
+				return
 			}
 
 			ch<-m
@@ -41,4 +48,20 @@ func (o *RawDemodulator) Decoder() <-chan Message {
 	}()
 
 	return ch
+}
+
+func (o RawDemodulator) SampleRate() uint32 {
+	return 22050
+}
+
+func (o RawDemodulator) BitDepth() uint16 {
+	return 16
+}
+
+func (o RawDemodulator) NumChannels() uint16 {
+	return 1
+}
+
+func (o RawDemodulator) WavCategory() uint16 {
+	return 1
 }

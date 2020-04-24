@@ -1,9 +1,9 @@
-# rouge: a DPSK modem
+# rouge: a BPSK modem
 
 ```text
  ^   A
 >θ.θ>/
-   ≈
+   ♯
 ```
 
 # EXAMPLE

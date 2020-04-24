@@ -10,15 +10,7 @@ import (
 
 var flagIn = flag.String("in", "", "WAV input file (default: raw stdin)")
 var flagOut = flag.String("out", "", "WAV output file (default: raw stdout)")
-var flagSampleRate = flag.Int("sampleRate", 44100, "output sample rate Hz (default: 44100")
-var flagBitDepth = flag.Int("bitDepth", 24, "output bit depth (default: 24)")
 var flagVersion = flag.Bool("version", false, "Show version information")
-
-// Mono channel counter identifier for go-audio.
-const Mono = 1
-
-// Pcm audio format identifier for go-audio.
-const Pcm = 1
 
 func main() {
 	flag.Parse()
@@ -57,7 +49,7 @@ func main() {
 			panic(err)
 		}
 
-		mod = rouge.NewWavModulator(file, *flagSampleRate, *flagBitDepth, Mono, Pcm)
+		mod = rouge.NewWavModulator(file, dem.SampleRate(), dem.BitDepth(), dem.NumChannels(), dem.SampleRate(), dem.BitDepth(), dem.NumChannels(), dem.WavCategory())
 	} else {
 		mod = rouge.NewRawModulator(os.Stdout)
 	}
