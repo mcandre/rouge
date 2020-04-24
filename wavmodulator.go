@@ -61,10 +61,16 @@ func (o *WavModulator) Encoder() (chan<- Message, <-chan error) {
 			// DPSK...
 			//
 
-			xs, err := BytesToInts(m.Data)
+			ys, err := BytesToUint32s(m.Data)
 
 			if err != nil {
 				return
+			}
+
+			var xs []int
+
+			for _, y := range ys {
+				xs = append(xs, int(y))
 			}
 
 			buf.Data = xs

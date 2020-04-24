@@ -64,11 +64,17 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 				return
 			}
 
+			var ys []uint32
+
+			for _, x := range buf.Data {
+				ys = append(ys, uint32(x))
+			}
+
 			//
 			// DPSK...
 			//
 
-			m.Data, err = IntsToBytes(buf.Data)
+			m.Data, err = Uint32sToBytes(ys)
 
 			if err != nil {
 				m.Error = &err

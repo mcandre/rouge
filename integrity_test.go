@@ -8,22 +8,20 @@ import (
 	"testing/quick"
 )
 
-func TestIntMarshaling(t *testing.T) {
-	symmetricProperty := func(xs []int) bool {
-		bs, err := rouge.IntsToBytes(xs)
+func TestUint32Marshaling(t *testing.T) {
+	symmetricProperty := func(xs []uint32) bool {
+		bs, err := rouge.Uint32sToBytes(xs)
 
 		if err != nil {
-			if err == rouge.IntegerElementOutOfBounds {
-				return true
-			}
-
 			t.Error(err)
+			return false
 		}
 
-		ys, err := rouge.BytesToInts(bs)
+		ys, err := rouge.BytesToUint32s(bs)
 
 		if err != nil {
 			t.Error(err)
+			return false
 		}
 
 		return reflect.DeepEqual(ys, xs)
