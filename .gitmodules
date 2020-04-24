@@ -1,0 +1,9 @@
+[submodule "vendor/github.com/go-audio/wav"]
+	path = vendor/github.com/go-audio/wav
+	url = https://github.com/go-audio/wav.git
+[submodule "vendor/github.com/go-audio/audio"]
+	path = vendor/github.com/go-audio/audio
+	url = https://github.com/go-audio/audio.git
+[submodule "vendor/github.com/go-audio/riff"]
+	path = vendor/github.com/go-audio/riff
+	url = https://github.com/go-audio/riff.git
