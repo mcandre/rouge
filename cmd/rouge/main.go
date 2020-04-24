@@ -10,6 +10,7 @@ import (
 
 var flagIn = flag.String("in", "", "WAV input file (default: raw stdin)")
 var flagOut = flag.String("out", "", "WAV output file (default: raw stdout)")
+var flagSampleRateIn = flag.Int("sampleRateIn", -1, "Specify sample rate in, e.g. with raw stdin data")
 var flagVersion = flag.Bool("version", false, "Show version information")
 
 func main() {
@@ -49,7 +50,13 @@ func main() {
 			panic(err)
 		}
 
-		mod = rouge.NewWavModulator(file, dem.SampleRate(), dem.BitDepth(), dem.NumChannels(), dem.SampleRate(), dem.BitDepth(), dem.NumChannels(), dem.WavCategory())
+		sampleRate := dem.SampleRate()
+
+		if *flagSampleRateIn != -1 {
+			sampleRate = uint32(*flagSampleRateIn)
+		}
+
+		mod = rouge.NewWavModulator(file, sampleRate, dem.BitDepth(), dem.NumChannels(), sampleRate, dem.BitDepth(), dem.NumChannels(), dem.WavCategory())
 	} else {
 		mod = rouge.NewRawModulator(os.Stdout)
 	}
