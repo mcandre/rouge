@@ -70,7 +70,7 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 			}
 
 			//
-			// DPSK...
+			// BPSK...
 			//
 
 			m.Data, err = Uint32sToBytes(ys)

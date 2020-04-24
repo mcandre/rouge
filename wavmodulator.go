@@ -58,7 +58,7 @@ func (o *WavModulator) Encoder() (chan<- Message, <-chan error) {
 			}
 
 			//
-			// DPSK...
+			// BPSK...
 			//
 
 			ys, err := BytesToUint32s(m.Data)

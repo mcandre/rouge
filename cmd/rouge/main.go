@@ -11,6 +11,9 @@ import (
 var flagIn = flag.String("in", "", "WAV input file (default: raw stdin)")
 var flagOut = flag.String("out", "", "WAV output file (default: raw stdout)")
 var flagSampleRateIn = flag.Int("sampleRateIn", -1, "Specify sample rate in, e.g. with raw stdin data")
+var flagBitDepthIn = flag.Int("bitDepthIn", -1, "Specify bit depth in, e.g. with raw stdin data")
+var flagChannelsIn = flag.Int("channelsIn", -1, "Specify number of audio channels in, e.g. with raw stdin data")
+var flagCategoryIn = flag.Int("categoryIn", -1, "Specify WAV category in, e.g. with raw stdin data. PCM is category 1.")
 var flagVersion = flag.Bool("version", false, "Show version information")
 
 func main() {
@@ -56,7 +59,25 @@ func main() {
 			sampleRate = uint32(*flagSampleRateIn)
 		}
 
-		mod = rouge.NewWavModulator(file, sampleRate, dem.BitDepth(), dem.NumChannels(), sampleRate, dem.BitDepth(), dem.NumChannels(), dem.WavCategory())
+		bitDepth := dem.BitDepth()
+
+		if *flagBitDepthIn != -1 {
+			bitDepth = uint16(*flagBitDepthIn)
+		}
+
+		channelsIn := dem.NumChannels()
+
+		if *flagChannelsIn != -1 {
+			channelsIn = uint16(*flagChannelsIn)
+		}
+
+		categoryIn := dem.WavCategory()
+
+		if *flagCategoryIn != -1 {
+			categoryIn = uint16(*flagCategoryIn)
+		}
+
+		mod = rouge.NewWavModulator(file, sampleRate, bitDepth, channelsIn, sampleRate, bitDepth, channelsIn, categoryIn)
 	} else {
 		mod = rouge.NewRawModulator(os.Stdout)
 	}
