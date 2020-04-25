@@ -73,6 +73,7 @@ func (o *WavModulator) Encoder() (<-chan struct{}, chan<- Message, <-chan error)
 			ys, err := BytesToUint32s(m.Data)
 
 			if err != nil {
+				chErr<-err
 				return
 			}
 
