@@ -8,31 +8,40 @@ import (
 	"os"
 )
 
+// WavModulatorConfig parameterizes a WavModulator.
+type WavModulatorConfig struct {
+	File *os.File
+	SampleRate uint32
+	BitDepth uint16
+	NumChannels uint16
+	WavCategory uint16
+}
+
 // WavModulator passes out WAV file data.
 type WavModulator struct {
 	w *wav.Encoder
-	sourceSampleRate uint32
-	sourceBitDepth uint16
-	sourceNumChannels uint16
+	config WavModulatorConfig
 }
 
 // NewWavModulator constructs a WavModulator.
-func NewWavModulator(f *os.File, sourceSampleRate uint32, sourceBitDepth uint16, sourceNumChannels uint16, sampleRate uint32, bitDepth uint16, numChans uint16, audioFormat uint16) *WavModulator {
+func NewWavModulator(config WavModulatorConfig) *WavModulator {
 	return &WavModulator{
-		w: wav.NewEncoder(f, int(sampleRate), int(bitDepth), int(numChans), int(audioFormat)),
-		sourceSampleRate: sourceSampleRate,
-		sourceBitDepth: sourceBitDepth,
-		sourceNumChannels: sourceNumChannels,
+		w: wav.NewEncoder(config.File, int(config.SampleRate), int(config.BitDepth), int(config.NumChannels), int(config.WavCategory)),
+		config: config,
 	}
 }
 
 // Encoder returns signal writers.
-func (o *WavModulator) Encoder() (chan<- Message, <-chan error) {
+func (o *WavModulator) Encoder() (<-chan struct{}, chan<- Message, <-chan error) {
+	chDone := make(chan struct{})
 	ch := make(chan Message)
 	chErr := make(chan error)
 
 	go func() {
 		defer func() {
+			close(ch)
+			close(chErr)
+
 			if err := o.w.Close(); err != nil {
 				log.Print(err)
 			}
@@ -48,13 +57,13 @@ func (o *WavModulator) Encoder() (chan<- Message, <-chan error) {
 			}
 
 			format := &audio.Format{
-				NumChannels: int(o.sourceNumChannels),
-				SampleRate: int(o.sourceSampleRate),
+				NumChannels: int(o.config.NumChannels),
+				SampleRate: int(o.config.SampleRate),
 			}
 
 			buf := audio.IntBuffer{
 				Format: format,
-				SourceBitDepth: int(o.sourceBitDepth),
+				SourceBitDepth: int(o.config.BitDepth),
 			}
 
 			//
@@ -81,10 +90,11 @@ func (o *WavModulator) Encoder() (chan<- Message, <-chan error) {
 			}
 
 			if m.Done {
+				chDone<-struct{}{}
 				return
 			}
 		}
 	}()
 
-	return ch, chErr
+	return chDone, ch, chErr
 }

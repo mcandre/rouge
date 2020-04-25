@@ -40,6 +40,10 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 	ch := make(chan Message)
 
 	go func() {
+		defer func() {
+			close(ch)
+		}()
+
 		for {
 			var m Message
 

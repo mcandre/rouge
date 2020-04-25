@@ -22,6 +22,8 @@ func (o *RawDemodulator) Decoder() <-chan Message {
 
 	go func() {
 		defer func() {
+			close(ch)
+
 			if err := o.f.Close(); err != nil {
 				log.Print(err)
 			}

@@ -16,12 +16,16 @@ func NewRawModulator(f *os.File) *RawModulator {
 }
 
 // Encoder returns signal writers.
-func (o *RawModulator) Encoder() (chan<- Message, <-chan error) {
+func (o *RawModulator) Encoder() (<-chan struct{}, chan<- Message, <-chan error) {
+	chDone := make(chan struct{})
 	ch := make(chan Message)
 	chErr := make(chan error)
 
 	go func() {
 		defer func() {
+			close(ch)
+			close(chErr)
+
 			if err := o.f.Close(); err != nil {
 				log.Print(err)
 			}
@@ -44,10 +48,11 @@ func (o *RawModulator) Encoder() (chan<- Message, <-chan error) {
 			}
 
 			if m.Done {
+				chDone<-struct{}{}
 				return
 			}
 		}
 	}()
 
-	return ch, chErr
+	return chDone, ch, chErr
 }
