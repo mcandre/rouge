@@ -5,7 +5,8 @@ import (
 	"errors"
 )
 
-var BO = binary.LittleEndian
+var BO = binary.BigEndian
+
 var InvalidBufferSize = errors.New("Invalid buffer size (expected a multiple of 3)")
 
 func Uint32sToBytes(xs []uint32) ([]byte, error) {
