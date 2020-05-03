@@ -162,5 +162,6 @@ See `rouge -help` for more options.
 # BUILD + INSTALL
 
 ```console
+$ git submodule update --init --recursive
 $ go install ./...
 ```
