@@ -135,17 +135,25 @@ $ diff -u /tmp/p0.te-hex.txt /tmp/p1.te-hex.txt
 
 That is, eleven bytes differ in the backup stream when the active pattern is switched from the first pattern to the second.
 
-Note that the last three bytes of each stream are repeated. Perhaps a checksum?
-
-Repeating the steps above for the 3rd - 7th patterns yields similar results.
-
-Eighth pattern active. [examples/p7.wav](examples/p7.wav)
+Repeating the steps above for the 3rd - 16th patterns yields similar results, though the size of the difference varies from somewhat larger to somewhat smaller. The bits preserving the active pattern ID are more complicated than they first appear.
 
 ```console
-$ hh /tmp/p7.te.dat >/tmp/p7.te-hex.txt
-$ diff -u /tmp/p0.te-hex.txt /tmp/p7.te-hex.txt
+$ diff -u /tmp/p0.te-hex.txt /tmp/p2.te-hex.txt
 --- /tmp/p0.te-hex.txt	2020-05-03 12:53:23.000000000 -0500
-+++ /tmp/p7.te-hex.txt	2020-05-03 12:53:51.000000000 -0500
++++ /tmp/p2.te-hex.txt	2020-05-03 12:53:32.000000000 -0500
+@@ -658,6 +658,6 @@
+ 00000136 83 6e fc d9 6b 28 f0 9d
+ 00000144 2e ab 6e a9 c4 a1 8c c1
+ 00000152 c0 6f 42 66 af 79 b4 6f
+-00000160 8f 0e b4 42 3a c6 72 d1
+-00000168 13 19 6e 89 59 47 55 55
++00000160 8f 0e b4 42 3a c6 0d 10
++00000168 d3 2a 52 7f 3b d3 55 55
+ 00000176 55
+
+ $ diff -u /tmp/p0.te-hex.txt /tmp/p5.te-hex.txt
+--- /tmp/p0.te-hex.txt	2020-05-03 12:53:23.000000000 -0500
++++ /tmp/p5.te-hex.txt	2020-05-03 12:53:42.000000000 -0500
 @@ -654,10 +654,10 @@
  00000104 05 e3 40 06 53 8f c9 ae
  00000112 ea 64 4c 2b 57 29 19 e8
@@ -156,24 +164,43 @@ $ diff -u /tmp/p0.te-hex.txt /tmp/p7.te-hex.txt
 -00000152 c0 6f 42 66 af 79 b4 6f
 -00000160 8f 0e b4 42 3a c6 72 d1
 -00000168 13 19 6e 89 59 47 55 55
+-00000176 55
 +00000128 1a 76 b8 e7 69 f9 23 1d
 +00000136 a1 f9 08 93 de f7 36 bf
 +00000144 b1 1d ee d4 33 43 0e b8
 +00000152 35 23 e9 35 a6 95 5b 16
-+00000160 04 29 5d 48 f5 68 a5 4c
-+00000168 53 90 31 33 16 8b 55 55
- 00000176 55
-```
++00000160 04 29 5d 48 f5 68 f5 72
++00000168 7a 59 32 3a 8b a0 aa aa
++00000176 aa
 
-Now a larger portion of the signal is altered. Repeating the steps above for the nineth - sixteenth patterns yields results closer to pattern eight than to pattern one. The bits preserving the active pattern ID are more complicated than they first appear.
-
-See `rouge -help` for more options.
+ $ diff -u /tmp/p0.te-hex.txt /tmp/p15.te-hex.txt
+--- /tmp/p0.te-hex.txt	2020-05-03 12:53:23.000000000 -0500
++++ /tmp/p15.te-hex.txt	2020-05-03 12:54:25.000000000 -0500
+@@ -654,10 +654,10 @@
+ 00000104 05 e3 40 06 53 8f c9 ae
+ 00000112 ea 64 4c 2b 57 29 19 e8
+ 00000120 ff 1b f4 d6 fd 8b 32 3d
+-00000128 1a 76 b8 e7 2b a6 94 53
+-00000136 83 6e fc d9 6b 28 f0 9d
+-00000144 2e ab 6e a9 c4 a1 8c c1
+-00000152 c0 6f 42 66 af 79 b4 6f
+-00000160 8f 0e b4 42 3a c6 72 d1
+-00000168 13 19 6e 89 59 47 55 55
+-00000176 55
++00000128 1a 76 b8 e7 69 f9 23 1d
++00000136 a1 f9 08 93 de f7 36 bf
++00000144 b1 1d ee d4 33 43 0e b8
++00000152 35 23 e9 35 a6 95 5b 16
++00000160 04 29 5d 48 f5 68 ba bc
++00000168 57 16 d3 0d 54 0a aa aa
++00000176 aa
+ ```
 
 ## Additional notes
 
 Repeated export transmissions of the same active pattern yield identical hex decodings.
 
-However, performing a factory reset (`Write + Pattern + insert batteries`) appears to alter
+The last three bytes of each stream are repeated. So far, they are restricted to either `0x555555` or `0xaaaaaa`.
 
 # REQUIREMENTS
 
