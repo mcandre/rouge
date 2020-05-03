@@ -49,7 +49,12 @@ $ rouge \
    -outerThreshold 1200 \
    -bitWindow 6 \
    >/tmp/p0.te.dat
+
+$ ls -Ahl /tmp/p0.te.dat
+-rw-r--r--  1 andrew  staff   5.2K May  3 12:53 /Users/andrew/Downloads/p0.te.dat
 ```
+
+That's in the ball park for a file size to completely model all the PO-32 Tonic parameters.
 
 Second pattern active. [examples/p1.wav](examples/p1.wav)
 
