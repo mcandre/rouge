@@ -6,6 +6,10 @@
    ♯
 ```
 
+# DISCLAIMER
+
+This project is intended purely for educational research purposes. Make sure to support your local synth shop! The findings here are provisional and incomplete. No guarantees. Your mileage may vary, etc. etc.
+
 # EXAMPLES
 
 PO-32 factory default backup. [examples/pattern-0.wav](examples/pattern-0.wav)
