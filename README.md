@@ -163,6 +163,7 @@ See `rouge -help` for more options.
 * [hellcat](https://github.com/mcandre/hellcat)
 * [objdump](https://linux.die.net/man/1/objdump)
 * [diff](https://linux.die.net/man/1/diff)
+* [git](https://git-scm.com/)
 
 # BUILD + INSTALL
 
