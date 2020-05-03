@@ -92,18 +92,22 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 	return ch
 }
 
+// SampleRate queries time precision.
 func (o WavDemodulator) SampleRate() int {
 	return int(o.w.SampleRate)
 }
 
+// BitDepth queries sensor precision.
 func (o WavDemodulator) BitDepth() int {
 	return int(o.w.BitDepth)
 }
 
+// NumChannels queries concurrent track count.
 func (o WavDemodulator) NumChannels() int {
 	return int(o.w.NumChans)
 }
 
+// WavCategory queries specific WAVE sub-format.
 func (o WavDemodulator) WavCategory() int {
 	return int(o.w.WavAudioFormat)
 }

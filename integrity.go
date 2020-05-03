@@ -5,10 +5,13 @@ import (
 	"errors"
 )
 
+// BO denotes an internal representation of PCM data.
 var BO = binary.BigEndian
 
-var InvalidBufferSize = errors.New("Invalid buffer size (expected a multiple of 3)")
+// ErrorInvalidBufferSize indicates a configuration error.
+var ErrorInvalidBufferSize = errors.New("Invalid buffer size (expected a multiple of 4)")
 
+// Uint32sToBytes applies BO encoding onto unsigned 32-bit integers.
 func Uint32sToBytes(xs []uint32) ([]byte, error) {
 	bs := []byte{}
 
@@ -21,9 +24,10 @@ func Uint32sToBytes(xs []uint32) ([]byte, error) {
 	return bs, nil
 }
 
+// BytesToUint32s applies BO decoding from byte arrays.
 func BytesToUint32s(bs []byte) ([]uint32, error) {
 	if len(bs) % 4 != 0 {
-		return nil, InvalidBufferSize
+		return nil, ErrorInvalidBufferSize
 	}
 
 	xs := []uint32{}

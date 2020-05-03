@@ -4,7 +4,7 @@ import (
 	"github.com/go-audio/audio"
 	"github.com/go-audio/wav"
 
-	"log"
+	"fmt"
 	"os"
 )
 
@@ -43,7 +43,7 @@ func (o *WavModulator) Encoder() (<-chan struct{}, chan<- Message, <-chan error)
 			close(chErr)
 
 			if err := o.w.Close(); err != nil {
-				log.Print(err)
+				fmt.Fprintf(os.Stderr, err.Error())
 			}
 		}()
 

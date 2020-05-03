@@ -1,12 +1,12 @@
 package rouge
 
 import (
+	"fmt"
 	"io"
-	"log"
 	"os"
 )
 
-// RawDemodulator passes in raw file data.
+// RawDemodulator passes in PCM samples from BO 32-bit unsigned integers.
 type RawDemodulator struct {
 	f *os.File
 }
@@ -25,7 +25,7 @@ func (o *RawDemodulator) Decoder() <-chan Message {
 			close(ch)
 
 			if err := o.f.Close(); err != nil {
-				log.Print(err)
+				fmt.Fprintf(os.Stderr, err.Error())
 			}
 		}()
 
@@ -52,18 +52,22 @@ func (o *RawDemodulator) Decoder() <-chan Message {
 	return ch
 }
 
+// SampleRate unspecified.
 func (o RawDemodulator) SampleRate() int {
 	return 0
 }
 
+// BitDepth unspecified.
 func (o RawDemodulator) BitDepth() int {
 	return 0
 }
 
+// NumChannels unspecified.
 func (o RawDemodulator) NumChannels() int {
 	return 0
 }
 
+// WavCategory unspecified.
 func (o RawDemodulator) WavCategory() int {
 	return 0
 }

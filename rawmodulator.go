@@ -1,11 +1,11 @@
 package rouge
 
 import (
-	"log"
+	"fmt"
 	"os"
 )
 
-// RawModulator passes out raw file data.
+// RawModulator passes out PCM samples as BO 32-bit unsigned integers.
 type RawModulator struct {
 	f *os.File
 }
@@ -27,7 +27,7 @@ func (o *RawModulator) Encoder() (<-chan struct{}, chan<- Message, <-chan error)
 			close(chErr)
 
 			if err := o.f.Close(); err != nil {
-				log.Print(err)
+				fmt.Fprintf(os.Stderr, err.Error())
 			}
 		}()
 
