@@ -9,7 +9,7 @@ import (
 )
 
 // ErrorInvalidBPSKSlice indicates a signal error.
-var ErrorInvalidBPSKSlice = errors.New("Invalid BPSK slice (expected a sine or negated sine wave in 8 amplitude points)")
+var ErrorInvalidBPSKSlice = errors.New("Invalid BPSK slice (expected a sine or negated sine wave in <bit window> amplitude points)")
 
 // ErrorInvalidBitLength indicates a signal error.
 var ErrorInvalidBitLength = errors.New("Invalid bit length (expected a multiple of 8)")
@@ -82,6 +82,8 @@ func (o BPSKDemodulator) fitSignal() (*byte, error) {
 
 	for i := 1; i < len(o.peakBuffer); i++ {
 		if math.Signbit(o.peakBuffer[i]) == sign {
+			fmt.Fprintf(os.Stderr, "Cursor: %v\n", o.cursor)
+			fmt.Fprintf(os.Stderr, "Peak buffer: %v\n", o.peakBuffer)
 			return nil, ErrorInvalidBPSKSlice
 		}
 
