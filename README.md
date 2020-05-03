@@ -57,6 +57,8 @@ $ diff \
 
 ## Read BPSK samples
 
+The next step is to apply the right phase shift keying algorithm to the signal. A simple BPSK attempt over a six-peak window yields some early results.
+
 ```console
 $ rouge \
    -bpskIn /tmp/pattern-0-mono.dat \
