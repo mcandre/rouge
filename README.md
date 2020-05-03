@@ -154,6 +154,8 @@ See `rouge -help` for more options.
 * [Audacity](https://www.audacityteam.org/)
 * [ffmpeg](https://www.ffmpeg.org/)
 * [mplayer](http://www.mplayerhq.hu/)
+* [hellcat](https://github.com/mcandre/hellcat)
+* [objdump](https://linux.die.net/man/1/objdump)
 
 # BUILD + INSTALL
 
