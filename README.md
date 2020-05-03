@@ -158,6 +158,7 @@ See `rouge -help` for more options.
 * [mplayer](http://www.mplayerhq.hu/)
 * [hellcat](https://github.com/mcandre/hellcat)
 * [objdump](https://linux.die.net/man/1/objdump)
+* [diff](https://linux.die.net/man/1/diff)
 
 # BUILD + INSTALL
 
