@@ -22,7 +22,7 @@ Rouge can manipulate WAVE PCM mono samples as 32-bit 2's complement integers.
 $ mplayer examples/p0.wav
 
 $ rouge \
-   -in /tmp/p0.wav \
+   -in examples/p0.wav \
    >/tmp/p0.pcm.dat
 
 $ rouge \
@@ -52,9 +52,23 @@ $ rouge \
 
 $ ls -Ahl /tmp/p0.te.dat
 -rw-r--r--  1 andrew  staff   5.2K May  3 12:53 /Users/andrew/Downloads/p0.te.dat
-```
 
 That's in the ball park for a file size to completely model all the PO-32 Tonic parameters.
+
+$ hexdump /tmp/p0.te.dat | head
+0000000 66 66 66 66 66 66 66 66 66 66 66 66 66 66 66 66
+*
+00000f0 66 66 66 66 66 66 66 66 66 66 66 66 9a 45 84 08
+0000100 57 7d 16 b3 a3 df 56 b7 7c 13 f9 f5 b1 f0 25 49
+0000110 ab b6 73 d7 a6 dd 76 98 ef b8 0b 10 55 a6 3c f9
+0000120 f9 81 3b 68 dd 03 69 a9 f7 fe c8 28 d8 35 33 c6
+0000130 f4 66 86 6c 51 65 1b e2 b2 01 c9 3f 96 3a 91 3a
+0000140 de ac 98 a4 b8 3e 13 d1 4a 3f d5 fb 8c c3 f6 40
+0000150 d6 57 e9 ee 52 66 a3 7d 7b 5b ea fa 4f 41 28 5b
+0000160 20 64 1d fe ed de 17 54 76 dc c7 90 08 e9 0e 8c
+
+$ hexdump /tmp/p0.te.dat >/tmp/p0.te-hex.txt
+```
 
 Second pattern active. [examples/p1.wav](examples/p1.wav)
 
