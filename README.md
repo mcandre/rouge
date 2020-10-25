@@ -113,6 +113,26 @@ Repeated export transmissions of the same active pattern yield identical hex dec
 
 The last three bytes of each stream are repeated. So far, they are restricted to either `0x555555` or `0xaaaaaa`.
 
+There are some string values in presets:
+
+```
+MicrotonicPresetV3: {
+	Tempo: 121.00000000 bpm
+	Pattern: a
+	StepRate: 1/16
+	Swing: 0.00000000%
+	FillRate: 2.00000000x
+	MastVol: 0.00000000 dB
+	Mutes: { Off, Off, Off, Off, Off, Off, Off, Off }
+	DrumPatches: {
+		1: {
+			Name: "SC BD Power"
+			Modified: true
+			Path: "./By Category/Bass Drum Patches/SC BD Power.mtdrum"
+```
+
+Unknown whether the strings are preserved in PO-32 signals, they may just be for VST lookup convenience.
+
 ## End Goal
 
 Find an analog + digital decoding sufficient to customize sounds:
