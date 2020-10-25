@@ -99,6 +99,38 @@ Repeated export transmissions of the same active pattern yield identical hex dec
 
 The last three bytes of each stream are repeated. So far, they are restricted to either `0x555555` or `0xaaaaaa`.
 
+## End Goal
+
+Find an analog + digital decoding sufficient to customize a _rimshot_ sound:
+
+```
+MicrotonicDrumPatchV3: {
+	OscWave: Sine
+	OscFreq: 616.14874268 Hz
+	OscAtk: 0.00000000 ms
+	OscDcy: 71.25314331 ms
+	ModMode: Sine
+	ModRate: 279.64397346 Hz
+	ModAmt: +32.85273205 sm
+	NFilMod: BP
+	NFilFrq: 1005.14013672 Hz
+	NFilQ: 0.70710677
+	NStereo: Off
+	NEnvMod: Exp
+	NEnvAtk: 0.00000000 ms
+	NEnvDcy: 60.78934776 ms
+	Mix: 50.00000000 / 50.00000000
+	DistAmt: 0.00000000
+	EQFreq: 1111.70104980 Hz
+	EQGain: +34.53779602 dB
+	Level: 0.00000000 dB
+	Pan: 0.00000000
+	OscVel: 28.42212677%
+	NVel: 34.16033936%
+	ModVel: 0.00000000%
+}
+```
+
 # REQUIREMENTS
 
 * [Go](https://golang.org/) 1.12+
