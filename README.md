@@ -95,6 +95,18 @@ Repeating the steps above for the 3rd - 16th patterns yields similar results, th
 
 Based on the complexity of individual sound configurations and the size of the relative diff between pattern backup signals, we can conclude that only a handful of pattern settings are present in the diffs, enough to signify which sounds trigger on which 16 sequencer steps. If any effect or motion effect automation is applied, that remains default and would appear to be absent from the signal.
 
+A sound pattern preset could be directly represented with two bytes for trigger sequence on/off state across sixteen steps, with two additional bytes for accents, and two more bytes for fills, amounting to six bytes.
+
+```
+1: {
+	Triggers: #-----#---#--#--
+	Accents:  ----------------
+	Fills:    ----------------
+}
+```
+
+With eight drum sounds, the pattern configuration is 48 bytes, or 24 hex pairs. In the neighborhood of how many hexpairs differ between the first factory pattern configuration and the selection of the second factory pattern configuration.
+
 ## Additional notes
 
 Repeated export transmissions of the same active pattern yield identical hex decodings.
