@@ -1,0 +1,25 @@
+MicrotonicDrumPatchV3: {
+	OscWave: Sine
+	OscFreq: 140.84896851 Hz
+	OscAtk: 0.00000000 ms
+	OscDcy: 265.07321167 ms
+	ModMode: Decay
+	ModRate: 69.64530717 ms
+	ModAmt: +52.56960135 sm
+	NFilMod: BP
+	NFilFrq: 2694.52758789 Hz
+	NFilQ: 0.81162369
+	NStereo: Off
+	NEnvMod: Linear
+	NEnvAtk: 0.00000000 ms
+	NEnvDcy: 340.53089650 ms
+	Mix: 73.23221862 / 26.76778138
+	DistAmt: 24.12137604
+	EQFreq: 1590.03442383 Hz
+	EQGain: +9.31291962 dB
+	Level: +3.39872415 dB
+	Pan: 0.00000000
+	OscVel: 30.62244606%
+	NVel: 44.13668442%
+	ModVel: 42.50209427%
+}
