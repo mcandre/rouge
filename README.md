@@ -93,6 +93,8 @@ That is, eleven bytes differ in the backup stream when the active pattern is swi
 
 Repeating the steps above for the 3rd - 16th patterns yields similar results, though the size of the difference varies from somewhat larger to somewhat smaller. The bits preserving the active pattern ID are more complicated than they first appear.
 
+Based on the complexity of individual sound configurations and the size of the relative diff between pattern backup signals, we can conclude that only a handful of pattern settings are present in the diffs, enough to signify which sounds trigger on which 16 sequencer steps. If any effect or motion effect automation is applied, that remains default and would appear to be absent from the signal.
+
 ## Additional notes
 
 Repeated export transmissions of the same active pattern yield identical hex decodings.
