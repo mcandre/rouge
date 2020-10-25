@@ -103,7 +103,7 @@ The last three bytes of each stream are repeated. So far, they are restricted to
 
 ## End Goal
 
-Find an analog + digital decoding sufficient to customize a _rimshot_ sound:
+Find an analog + digital decoding sufficient to customize sounds:
 
 ```
 MicrotonicDrumPatchV3: {
@@ -130,6 +130,35 @@ MicrotonicDrumPatchV3: {
 	OscVel: 28.42212677%
 	NVel: 34.16033936%
 	ModVel: 0.00000000%
+}
+
+MicroTonicDrumPatchV1={
+	Name="NE RND Zeroto9"
+	Modified=true
+	Path="/Library/Audio/Presets/Sonic Charge/MicroTonic Drum Patches/Effect Patches/NE RND Zeroto9.mtdp"
+	OscWave=Triangle
+	OscFreq=742.02076800Hz
+	OscDcy=58.21029589ms
+	ModMode=Noise
+	ModRate=0 Hz
+	ModAmt=+22.19031754sm
+	NFilMod=BP
+	NFilFrq=149.74901463Hz
+	NFilQ=1008.40029486
+	NStereo=Off
+	NEnvMod=Exp
+	NEnvAtk=0.00000000ms
+	NEnvDcy=216.86110703ms
+	Mix=66.51028097/33.48971903
+	DistAmt=17.84428060
+	EQFreq=5377.53820357Hz
+	EQGain=+28.41660023dB
+	Level=+10.00000000dB
+	Pan=0.00000000
+	Output=A
+	OscVel=100.00000000%
+	NVel=100.00000000%
+	ModVel=100.00000000%
 }
 ```
 
