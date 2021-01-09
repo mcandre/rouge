@@ -47,7 +47,7 @@ $ rouge \
    -bpskIn /tmp/p0.pcm.dat \
    -innerThreshold 1000 \
    -outerThreshold 1200 \
-   -bitWindow 6 \
+   -symbolWindow 6 \
    >/tmp/p0.te.dat
 
 $ ls -Ahl /tmp/p0.te.dat

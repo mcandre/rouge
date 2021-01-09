@@ -8,30 +8,28 @@ import (
 	"os"
 )
 
-// ErrorInvalidBPSKSlice indicates a signal error.
-var ErrorInvalidBPSKSlice = errors.New("Invalid BPSK slice (expected a sine or negated sine wave in <bit window> amplitude points)")
+// ErrorInvalidQPSKSlice indicates a signal error.
+var ErrorInvalidQPSKSlice = errors.New("Invalid QPSK slice (expected a sine or negated sine wave in <bit window> amplitude points)")
 
-// ErrorInvalidBitLength indicates a signal error.
-var ErrorInvalidBitLength = errors.New("Invalid bit length (expected a multiple of 8)")
-
-// BPSKDemodulator passes in mono PCM samples from BO 32-bit unsigned signed integers,
+// QPSKDemodulator passes in mono PCM samples from BO 32-bit unsigned signed integers,
 // reads 16-bit signed integers with two's complement,
-// fits onto a binary phase shift signal,
+// fits onto a quadrature phase shift signal,
 // and finally outputs bit data in byte chunks,
 // expanding each byte into a BO 32-bit unsigned integer.
-type BPSKDemodulator struct {
+type QPSKDemodulator struct {
 	f            *os.File
 	symbolWindow int
 	bitBuffer    byte
 	bitBufferLen uint8
+	stemBuffer   []float64
 	peakBuffer   []float64
 	cursor       Cursor
 }
 
-// NewBPSKDemodulator constructs a BPSKDemodulator,
+// NewQPSKDemodulator constructs a QPSKDemodulator,
 // given a peak amplitude threshold.
-func NewBPSKDemodulator(f *os.File, symbolWindow int, innerThreshold float64, outerThreshold float64) *BPSKDemodulator {
-	return &BPSKDemodulator{
+func NewQPSKDemodulator(f *os.File, symbolWindow int, innerThreshold float64, outerThreshold float64) *QPSKDemodulator {
+	return &QPSKDemodulator{
 		f:            f,
 		symbolWindow: symbolWindow,
 		cursor: Cursor{
@@ -41,9 +39,9 @@ func NewBPSKDemodulator(f *os.File, symbolWindow int, innerThreshold float64, ou
 	}
 }
 
-// fitSignal attempts to read a bit from a BPSK sample slice.
+// fitSignal attempts to read a bit from a QPSK sample slice.
 // Returns an error on
-func (o BPSKDemodulator) fitSignal() (*byte, error) {
+func (o QPSKDemodulator) fitSignal() (*byte, error) {
 	sign := math.Signbit(o.peakBuffer[0])
 
 	var bitCandidate byte
@@ -56,7 +54,7 @@ func (o BPSKDemodulator) fitSignal() (*byte, error) {
 		if math.Signbit(o.peakBuffer[i]) == sign {
 			fmt.Fprintf(os.Stderr, "Cursor: %v\n", o.cursor)
 			fmt.Fprintf(os.Stderr, "Peak buffer: %v\n", o.peakBuffer)
-			return nil, ErrorInvalidBPSKSlice
+			return nil, ErrorInvalidQPSKSlice
 		}
 
 		sign = !sign
@@ -66,7 +64,7 @@ func (o BPSKDemodulator) fitSignal() (*byte, error) {
 }
 
 // Decoder returns signal readers.
-func (o *BPSKDemodulator) Decoder() <-chan Message {
+func (o *QPSKDemodulator) Decoder() <-chan Message {
 	ch := make(chan Message)
 
 	go func() {
@@ -127,11 +125,17 @@ func (o *BPSKDemodulator) Decoder() <-chan Message {
 
 				o.cursor.Progress()
 
+				if o.cursor.CheckStem(sample) {
+					o.stemBuffer = append(o.stemBuffer, sample)
+				}
+
 				if !o.cursor.CheckPeak(sample) {
 					continue
 				}
 
 				o.peakBuffer = append(o.peakBuffer, sample)
+
+				// ...
 
 				if len(o.peakBuffer) == o.symbolWindow {
 					bitP, err2 := o.fitSignal()
@@ -173,21 +177,21 @@ func (o *BPSKDemodulator) Decoder() <-chan Message {
 }
 
 // SampleRate unspecified.
-func (o BPSKDemodulator) SampleRate() int {
+func (o QPSKDemodulator) SampleRate() int {
 	return 0
 }
 
 // BitDepth unspecified.
-func (o BPSKDemodulator) BitDepth() int {
+func (o QPSKDemodulator) BitDepth() int {
 	return 0
 }
 
 // NumChannels unspecified.
-func (o BPSKDemodulator) NumChannels() int {
+func (o QPSKDemodulator) NumChannels() int {
 	return 0
 }
 
 // WavCategory unspecified.
-func (o BPSKDemodulator) WavCategory() int {
+func (o QPSKDemodulator) WavCategory() int {
 	return 0
 }

@@ -11,9 +11,10 @@ import (
 var flagIn = flag.String("in", "", "WAV input file (default: raw stdin)")
 var flagOut = flag.String("out", "", "WAV output file (default: raw stdout)")
 var flagBPSKIn = flag.String("bpskIn", "", "BPSK input file")
-var flagBitWindow = flag.Int("bitWindow", 0, "Specify how many peaks/vallyes constitute a BPSK bit")
-var flagInnerThreshold = flag.Float64("innerThreshold", 0.0, "Specify maximum amplitude for BPSK lulls")
-var flagOuterThreshold = flag.Float64("outerThreshold", 0.0, "Specify minimum amplitude for BPSK peaks")
+var flagQPSKIn = flag.String("qpskIn", "", "QPSK input file")
+var flagsymbolWindow = flag.Int("symbolWindow", 0, "Specify how many local max/minima constitute a *PSK symbol")
+var flagInnerThreshold = flag.Float64("innerThreshold", 0.0, "Specify maximum amplitude for *PSK lulls")
+var flagOuterThreshold = flag.Float64("outerThreshold", 0.0, "Specify minimum amplitude for *PSK peaks")
 var flagSampleRate = flag.Int("sampleRate", 0, "Specify sample rate in, e.g. with raw stdin data")
 var flagBitDepth = flag.Int("bitDepth", 0, "Specify bit depth in, e.g. with raw stdin data")
 var flagChannels = flag.Int("channels", 0, "Specify number of audio channels in, e.g. with raw stdin data")
@@ -31,8 +32,8 @@ func main() {
 	var dem rouge.Demodulator
 
 	if *flagBPSKIn != "" {
-		if *flagBitWindow == 0 {
-			fmt.Fprintf(os.Stderr, "Missing -in or -bitWindow\n")
+		if *flagsymbolWindow == 0 {
+			fmt.Fprintf(os.Stderr, "Missing -in or -symbolWindow\n")
 			os.Exit(1)
 		}
 
@@ -52,7 +53,30 @@ func main() {
 			panic(err)
 		}
 
-		dem = rouge.NewBPSKDemodulator(file, *flagBitWindow, *flagInnerThreshold, *flagOuterThreshold)
+		dem = rouge.NewBPSKDemodulator(file, *flagsymbolWindow, *flagInnerThreshold, *flagOuterThreshold)
+	} else if *flagQPSKIn != "" {
+		if *flagsymbolWindow == 0 {
+			fmt.Fprintf(os.Stderr, "Missing -in or -symbolWindow\n")
+			os.Exit(1)
+		}
+
+		if *flagInnerThreshold == 0.0 {
+			fmt.Fprintf(os.Stderr, "Missing -in or -innerThreshold\n")
+			os.Exit(1)
+		}
+
+		if *flagOuterThreshold == 0.0 {
+			fmt.Fprintf(os.Stderr, "Missing -in or -outerThreshold\n")
+			os.Exit(1)
+		}
+
+		file, err := os.Open(*flagQPSKIn)
+
+		if err != nil {
+			panic(err)
+		}
+
+		dem = rouge.NewQPSKDemodulator(file, *flagsymbolWindow, *flagInnerThreshold, *flagOuterThreshold)
 	} else if *flagIn != "" {
 		file, err := os.Open(*flagIn)
 
@@ -125,9 +149,9 @@ func main() {
 		}
 
 		mod = rouge.NewWavModulator(rouge.WavModulatorConfig{
-			File: file,
-			SampleRate: uint32(sampleRate),
-			BitDepth: uint16(bitDepth),
+			File:        file,
+			SampleRate:  uint32(sampleRate),
+			BitDepth:    uint16(bitDepth),
 			NumChannels: uint16(numChannels),
 			WavCategory: uint16(wavCategory),
 		})
@@ -146,7 +170,7 @@ func main() {
 		select {
 		case err := <-chErr:
 			panic(err)
-		case chOut<-m:
+		case chOut <- m:
 		}
 
 		if m.Done {
