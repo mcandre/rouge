@@ -1,6 +1,7 @@
-
-# Created by https://www.gitignore.io/api/go
-# Edit at https://www.gitignore.io/?templates=go
+cover.html
+bin
+# Created by https://www.toptal.com/developers/gitignore/api/go
+# Edit at https://www.toptal.com/developers/gitignore?templates=go
 
 ### Go ###
 # Binaries for programs and plugins
@@ -20,7 +21,7 @@
 # vendor/
 
 ### Go Patch ###
-/vendor/
+# /vendor/
 /Godeps/
 
-# End of https://www.gitignore.io/api/go
+# End of https://www.toptal.com/developers/gitignore/api/go
