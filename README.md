@@ -194,9 +194,8 @@ MicroTonicDrumPatchV1={
 }
 ```
 
-# REQUIREMENTS
+# RUNTIME REQUIREMENTS
 
-* [Go](https://golang.org/) 1.12+
 * [PO-32 Tonic](https://teenage.engineering/products/po-32)
 
 ## Recommended
@@ -206,11 +205,13 @@ MicroTonicDrumPatchV1={
 * [mplayer](http://www.mplayerhq.hu/)
 * [hexdump](http://man7.org/linux/man-pages/man1/hexdump.1.html)
 * [diff](https://linux.die.net/man/1/diff)
-* [git](https://git-scm.com/)
 
-# BUILD + INSTALL
+# INSTALL FROM SOURCE
 
 ```console
-$ git submodule update --init --recursive
-$ go install ./...
+$ go install github.com/mcandre/rouge/cmd/rouge@latest
 ```
+
+# CONTRIBUTING
+
+For more information on developing rouge itself, see [DEVELOPMENT.md](DEVELOPMENT.md).
