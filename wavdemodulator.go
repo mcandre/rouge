@@ -49,7 +49,7 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 
 			buf := &audio.IntBuffer{
 				Format: o.w.Format(),
-				Data: make([]int, 1024),
+				Data:   make([]int, 1024),
 			}
 
 			count, err := o.w.PCMBuffer(buf)
@@ -57,13 +57,13 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 
 			if err != nil && err != io.EOF {
 				m.Error = &err
-				ch<-m
+				ch <- m
 				return
 			}
 
 			if count == 0 {
 				m.Done = true
-				ch<-m
+				ch <- m
 				return
 			}
 
@@ -81,11 +81,11 @@ func (o *WavDemodulator) Decoder() <-chan Message {
 
 			if err != nil {
 				m.Error = &err
-				ch<-m
+				ch <- m
 				return
 			}
 
-			ch<-m
+			ch <- m
 		}
 	}()
 

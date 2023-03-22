@@ -125,9 +125,9 @@ func main() {
 		}
 
 		mod = rouge.NewWavModulator(rouge.WavModulatorConfig{
-			File: file,
-			SampleRate: uint32(sampleRate),
-			BitDepth: uint16(bitDepth),
+			File:        file,
+			SampleRate:  uint32(sampleRate),
+			BitDepth:    uint16(bitDepth),
 			NumChannels: uint16(numChannels),
 			WavCategory: uint16(wavCategory),
 		})
@@ -146,7 +146,7 @@ func main() {
 		select {
 		case err := <-chErr:
 			panic(err)
-		case chOut<-m:
+		case chOut <- m:
 		}
 
 		if m.Done {

@@ -20,7 +20,7 @@ type Cursor struct {
 
 	InnerThreshold float64
 	OuterThreshold float64
-	Position uint64
+	Position       uint64
 }
 
 // CheckPeak parses a sample amplitude,
@@ -48,19 +48,19 @@ func (o *Cursor) CheckPeak(sample float64) bool {
 // and finally outputs bit data in byte chunks,
 // expanding each byte into a BO 32-bit unsigned integer.
 type BPSKDemodulator struct {
-	f *os.File
-	bitWindow int
-	bitBuffer byte
+	f            *os.File
+	bitWindow    int
+	bitBuffer    byte
 	bitBufferLen uint8
-	peakBuffer []float64
-	cursor Cursor
+	peakBuffer   []float64
+	cursor       Cursor
 }
 
 // NewBPSKDemodulator constructs a BPSKDemodulator,
 // given a peak amplitude threshold.
 func NewBPSKDemodulator(f *os.File, bitWindow int, innerThreshold float64, outerThreshold float64) *BPSKDemodulator {
 	return &BPSKDemodulator{
-		f: f,
+		f:         f,
 		bitWindow: bitWindow,
 		cursor: Cursor{
 			InnerThreshold: innerThreshold,
@@ -114,32 +114,32 @@ func (o *BPSKDemodulator) Decoder() <-chan Message {
 
 			if err != nil && err != io.EOF {
 				m.Error = &err
-				ch<-m
+				ch <- m
 				return
 			}
 
 			m.Done = err == io.EOF
 
 			if m.Done && count == 0 {
-				ch<-m
+				ch <- m
 				return
 			}
 
 			buf = buf[:count]
 
-			if count % 4 != 0 {
+			if count%4 != 0 {
 				m.Error = &ErrorInvalidBufferSize
-				ch<-m
+				ch <- m
 				return
 			}
 
 			for i := 0; i < count/4; i++ {
-				sampleBytes := buf[i*4:i*4+4]
+				sampleBytes := buf[i*4 : i*4+4]
 				sample32s, err2 := BytesToUint32s(sampleBytes)
 
 				if err2 != nil {
 					m.Error = &err2
-					ch<-m
+					ch <- m
 					return
 				}
 
@@ -147,7 +147,7 @@ func (o *BPSKDemodulator) Decoder() <-chan Message {
 
 				var sample float64
 
-				if sampleTwosComplement & 0x80000000 == 0 {
+				if sampleTwosComplement&0x80000000 == 0 {
 					sample = float64(sampleTwosComplement)
 				} else {
 					sample = float64(int32(sampleTwosComplement))
@@ -164,7 +164,7 @@ func (o *BPSKDemodulator) Decoder() <-chan Message {
 
 					if err2 != nil {
 						m.Error = &err2
-						ch<-m
+						ch <- m
 						return
 					}
 
@@ -175,7 +175,7 @@ func (o *BPSKDemodulator) Decoder() <-chan Message {
 
 					if o.bitBufferLen == 8 {
 						m.Data = []byte{o.bitBuffer}
-						ch<-m
+						ch <- m
 
 						if m.Done {
 							return
@@ -185,7 +185,7 @@ func (o *BPSKDemodulator) Decoder() <-chan Message {
 						o.bitBufferLen = 0
 					} else if m.Done {
 						m.Error = &ErrorInvalidBitLength
-						ch<-m
+						ch <- m
 						return
 					}
 

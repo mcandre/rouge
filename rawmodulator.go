@@ -43,12 +43,12 @@ func (o *RawModulator) Encoder() (<-chan struct{}, chan<- Message, <-chan error)
 			_, err := o.f.Write(m.Data)
 
 			if err != nil {
-				chErr<-err
+				chErr <- err
 				return
 			}
 
 			if m.Done {
-				chDone<-struct{}{}
+				chDone <- struct{}{}
 				return
 			}
 		}

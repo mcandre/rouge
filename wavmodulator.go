@@ -10,23 +10,23 @@ import (
 
 // WavModulatorConfig parameterizes a WavModulator.
 type WavModulatorConfig struct {
-	File *os.File
-	SampleRate uint32
-	BitDepth uint16
+	File        *os.File
+	SampleRate  uint32
+	BitDepth    uint16
 	NumChannels uint16
 	WavCategory uint16
 }
 
 // WavModulator passes out WAV file data.
 type WavModulator struct {
-	w *wav.Encoder
+	w      *wav.Encoder
 	config WavModulatorConfig
 }
 
 // NewWavModulator constructs a WavModulator.
 func NewWavModulator(config WavModulatorConfig) *WavModulator {
 	return &WavModulator{
-		w: wav.NewEncoder(config.File, int(config.SampleRate), int(config.BitDepth), int(config.NumChannels), int(config.WavCategory)),
+		w:      wav.NewEncoder(config.File, int(config.SampleRate), int(config.BitDepth), int(config.NumChannels), int(config.WavCategory)),
 		config: config,
 	}
 }
@@ -58,11 +58,11 @@ func (o *WavModulator) Encoder() (<-chan struct{}, chan<- Message, <-chan error)
 
 			format := &audio.Format{
 				NumChannels: int(o.config.NumChannels),
-				SampleRate: int(o.config.SampleRate),
+				SampleRate:  int(o.config.SampleRate),
 			}
 
 			buf := audio.IntBuffer{
-				Format: format,
+				Format:         format,
 				SourceBitDepth: int(o.config.BitDepth),
 			}
 
@@ -73,7 +73,7 @@ func (o *WavModulator) Encoder() (<-chan struct{}, chan<- Message, <-chan error)
 			ys, err := BytesToUint32s(m.Data)
 
 			if err != nil {
-				chErr<-err
+				chErr <- err
 				return
 			}
 
@@ -86,12 +86,12 @@ func (o *WavModulator) Encoder() (<-chan struct{}, chan<- Message, <-chan error)
 			buf.Data = xs
 
 			if err := o.w.Write(&buf); err != nil {
-				chErr<-err
+				chErr <- err
 				return
 			}
 
 			if m.Done {
-				chDone<-struct{}{}
+				chDone <- struct{}{}
 				return
 			}
 		}

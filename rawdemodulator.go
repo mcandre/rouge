@@ -32,7 +32,7 @@ func (o *RawDemodulator) Decoder() <-chan Message {
 		for {
 			buf := make([]byte, 1024)
 			count, err := o.f.Read(buf)
-			m := Message{ Data: buf[:count] }
+			m := Message{Data: buf[:count]}
 
 			if err != nil {
 				if err == io.EOF {
@@ -41,11 +41,11 @@ func (o *RawDemodulator) Decoder() <-chan Message {
 					m.Error = &err
 				}
 
-				ch<-m
+				ch <- m
 				return
 			}
 
-			ch<-m
+			ch <- m
 		}
 	}()
 
