@@ -9,10 +9,10 @@ import (
 )
 
 // ErrorInvalidBPSKSlice indicates a signal error.
-var ErrorInvalidBPSKSlice = errors.New("Invalid BPSK slice (expected a sine or negated sine wave in <bit window> amplitude points)")
+var ErrorInvalidBPSKSlice = errors.New("invalid BPSK slice (expected a sine or negated sine wave in <bit window> amplitude points)")
 
 // ErrorInvalidBitLength indicates a signal error.
-var ErrorInvalidBitLength = errors.New("Invalid bit length (expected a multiple of 8)")
+var ErrorInvalidBitLength = errors.New("invalid bit length (expected a multiple of 8)")
 
 // Cursor seeks to the start of the next peak/valley.
 type Cursor struct {
@@ -102,7 +102,7 @@ func (o *BPSKDemodulator) Decoder() <-chan Message {
 			close(ch)
 
 			if err := o.f.Close(); err != nil {
-				fmt.Fprintf(os.Stderr, err.Error())
+				fmt.Fprintln(os.Stderr, err.Error())
 			}
 		}()
 

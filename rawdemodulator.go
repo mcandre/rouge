@@ -25,7 +25,7 @@ func (o *RawDemodulator) Decoder() <-chan Message {
 			close(ch)
 
 			if err := o.f.Close(); err != nil {
-				fmt.Fprintf(os.Stderr, err.Error())
+				fmt.Fprintln(os.Stderr, err.Error())
 			}
 		}()
 

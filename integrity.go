@@ -9,7 +9,7 @@ import (
 var BO = binary.BigEndian
 
 // ErrorInvalidBufferSize indicates a configuration error.
-var ErrorInvalidBufferSize = errors.New("Invalid buffer size (expected a multiple of 4)")
+var ErrorInvalidBufferSize = errors.New("invalid buffer size (expected a multiple of 4)")
 
 // Uint32sToBytes applies BO encoding onto unsigned 32-bit integers.
 func Uint32sToBytes(xs []uint32) ([]byte, error) {

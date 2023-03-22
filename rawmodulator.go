@@ -27,7 +27,7 @@ func (o *RawModulator) Encoder() (<-chan struct{}, chan<- Message, <-chan error)
 			close(chErr)
 
 			if err := o.f.Close(); err != nil {
-				fmt.Fprintf(os.Stderr, err.Error())
+				fmt.Fprintln(os.Stderr, err.Error())
 			}
 		}()
 
