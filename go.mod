@@ -1,6 +1,6 @@
 module github.com/mcandre/rouge
 
-go 1.19
+go 1.20
 
 require (
 	github.com/go-audio/audio v1.0.0
