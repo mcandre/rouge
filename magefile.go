@@ -82,7 +82,12 @@ func Nakedret() error { return mageextras.Nakedret("-l", "0") }
 func Staticcheck() error { return mageextras.Staticcheck() }
 
 // Unmake runs unmake.
-func Unmake() error { return exec.Command("unmake", "makefile").Run() }
+func Unmake() error {
+	cmd := exec.Command("unmake", ".")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
 
 // Lint runs the lint suite.
 func Lint() error {
