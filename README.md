@@ -194,6 +194,10 @@ MicroTonicDrumPatchV1={
 }
 ```
 
+# LICENSE
+
+FreeBSD
+
 # RUNTIME REQUIREMENTS
 
 * [PO-32 Tonic](https://teenage.engineering/products/po-32)
