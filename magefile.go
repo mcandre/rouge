@@ -6,7 +6,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"os/exec"
 
 	"github.com/magefile/mage/mg"
 	mageextras "github.com/mcandre/mage-extras"
@@ -39,11 +38,8 @@ func (o *collectingWalker) Walk(path string, info os.FileInfo, err error) error 
 	return nil
 }
 
-// IntegrationTest executes a self-test.
-func IntegrationTest() error { mg.Deps(Port); return nil }
-
-// Text runs unit and integration tests.
-func Test() error { mg.Deps(UnitTest); mg.Deps(IntegrationTest); return nil }
+// Test runs tests.
+func Test() error { mg.Deps(UnitTest); return nil }
 
 // CoverHTML denotes the HTML formatted coverage filename.
 var CoverHTML = "cover.html"
@@ -80,10 +76,13 @@ func Staticcheck() error { return mageextras.Staticcheck() }
 
 // Unmake runs unmake.
 func Unmake() error {
-	cmd := exec.Command("unmake", ".")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	err := mageextras.Unmake(".")
+
+	if err != nil {
+		return err
+	}
+
+	return mageextras.Unmake("-n", ".")
 }
 
 // Lint runs the lint suite.
