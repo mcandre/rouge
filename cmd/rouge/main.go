@@ -1,3 +1,4 @@
+// Package main implements a CLI application analyzing PO-32 modems.
 package main
 
 import (
