@@ -28,9 +28,6 @@ func Audit() error {
 	return Snyk()
 }
 
-// UnitTests runs the unit test suite.
-func UnitTest() error { return mageextras.UnitTest() }
-
 // collectingWalker collects file paths recursively.
 type collectingWalker struct {
 	Paths []string
@@ -45,8 +42,8 @@ func (o *collectingWalker) Walk(path string, info os.FileInfo, err error) error 
 	return nil
 }
 
-// Test runs tests.
-func Test() error { mg.Deps(UnitTest); return nil }
+// Test runs a test test.
+func Test() error { return mageextras.UnitTest() }
 
 // CoverHTML denotes the HTML formatted coverage filename.
 var CoverHTML = "cover.html"
