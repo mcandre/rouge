@@ -1,6 +1,6 @@
 module github.com/mcandre/rouge
 
-go 1.24
+go 1.24.2
 
 require (
 	github.com/go-audio/audio v1.0.0
@@ -44,6 +44,3 @@ tool (
 	github.com/mgechev/revive
 	honnef.co/go/tools/cmd/staticcheck
 )
-
-// Pending https://github.com/alexkohler/nakedret/issues/38
-replace github.com/alexkohler/nakedret/v2 v2.0.5 => github.com/aep-sunlife/nakedret/v2 v2.0.0-20250227175454-3fb3a0f5caba
