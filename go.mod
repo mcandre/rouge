@@ -7,7 +7,7 @@ require (
 	github.com/go-audio/riff v1.0.0
 	github.com/go-audio/wav v1.0.0
 	github.com/magefile/mage v1.15.0
-	github.com/mcandre/mage-extras v0.0.23
+	github.com/mcandre/mage-extras v0.0.24
 )
 
 require (
