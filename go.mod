@@ -1,20 +1,20 @@
 module github.com/mcandre/rouge
 
-go 1.24.5
+go 1.24.6
 
 require (
 	github.com/go-audio/audio v1.0.0
 	github.com/go-audio/riff v1.0.0
-	github.com/go-audio/wav v1.0.0
+	github.com/go-audio/wav v1.1.0
 	github.com/magefile/mage v1.15.0
-	github.com/mcandre/mage-extras v0.0.26
+	github.com/mcandre/mage-extras v0.0.27
 )
 
 require (
 	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/alexkohler/nakedret/v2 v2.0.6 // indirect
 	github.com/kisielk/errcheck v1.9.0 // indirect
-	github.com/mcandre/factorio v0.0.13 // indirect
+	github.com/mcandre/factorio v0.0.14 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
 	golang.org/x/mod v0.24.0 // indirect
 	golang.org/x/sync v0.13.0 // indirect
